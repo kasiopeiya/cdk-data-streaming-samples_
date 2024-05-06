@@ -1,7 +1,6 @@
-import { Stack, type StackProps } from 'aws-cdk-lib'
+import { Stack, type StackProps, RemovalPolicy } from 'aws-cdk-lib'
 import { type Construct } from 'constructs'
-
-import { MyS3Bucket } from '../construct/myS3'
+import * as s3 from 'aws-cdk-lib/aws-s3'
 
 /**
  * ステートフルなリソースを構築する
@@ -13,7 +12,11 @@ export class BaseStack extends Stack {
     /*
     * S3
     -------------------------------------------------------------------------- */
-    new MyS3Bucket(this, 'Bucket1', {})
-    new MyS3Bucket(this, 'Bucket2', {})
+    new s3.Bucket(this, 'Bucket', {
+      autoDeleteObjects: true,
+      removalPolicy: RemovalPolicy.DESTROY,
+      encryption: s3.BucketEncryption.S3_MANAGED,
+      enforceSSL: true
+    })
   }
 }

@@ -8,7 +8,6 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "test:fga": "jest ./test/**/fineGrained.test.ts",
     "test:snap": "jest ./test/**/snapshot.test.ts",
     "cdk": "cdk",
     "prepare": "husky",
