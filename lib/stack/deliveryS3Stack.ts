@@ -5,8 +5,10 @@ import * as kinesisfirehose_alpha from '@aws-cdk/aws-kinesisfirehose-alpha'
 import * as kinesisfirehose_destination_alpha from '@aws-cdk/aws-kinesisfirehose-destinations-alpha'
 
 import { MyDataStream } from '../construct/kds'
+import { KdsCWDashboard } from '../construct/kdsCWDashboard'
 
 interface DeliveryS3StackProps extends StackProps {
+  prefix: string
   bucket: Bucket
 }
 
@@ -28,7 +30,6 @@ export class DeliveryS3Stack extends Stack {
     * Data Firehose
     -------------------------------------------------------------------------- */
     const s3Destination = new kinesisfirehose_destination_alpha.S3Bucket(props.bucket, {
-      compression: kinesisfirehose_destination_alpha.Compression.GZIP,
       bufferingInterval: Duration.seconds(60),
       dataOutputPrefix: 'data/!{timestamp:yyyy/MM/dd/HH}/',
       errorOutputPrefix: 'error/!{firehose:error-output-type}/!{timestamp:yyyy/MM/dd/HH}/'
@@ -37,6 +38,14 @@ export class DeliveryS3Stack extends Stack {
     new kinesisfirehose_alpha.DeliveryStream(this, 'SampleDeliveryStream', {
       destinations: [s3Destination],
       sourceStream: myDataStream.dataStream
+    })
+
+    /*
+    * Monitoring
+    -------------------------------------------------------------------------- */
+    new KdsCWDashboard(this, 'KdsCWDashborad', {
+      prefix: props.prefix,
+      dataStream: myDataStream.dataStream
     })
   }
 }

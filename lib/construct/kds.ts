@@ -1,5 +1,5 @@
 import { Construct } from 'constructs'
-import { Stream, type StreamProps } from 'aws-cdk-lib/aws-kinesis'
+import { Stream, type StreamProps, StreamMode } from 'aws-cdk-lib/aws-kinesis'
 import * as ssm from 'aws-cdk-lib/aws-ssm'
 
 interface MyDataStreamProps {
@@ -15,7 +15,8 @@ export class MyDataStream extends Construct {
 
     // Kinesis Data Streams
     this.dataStream = new Stream(this, 'Resource', {
-      shardCount: props.dataStreamProps?.shardCount ?? 1,
+      // shardCount: props.dataStreamProps?.shardCount ?? 1,
+      streamMode: StreamMode.ON_DEMAND,
       ...props.dataStreamProps
     })
 
