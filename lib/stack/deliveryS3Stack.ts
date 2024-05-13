@@ -23,7 +23,7 @@ export class DeliveryS3Stack extends Stack {
     * Kinesis Data Streams
     -------------------------------------------------------------------------- */
     const myDataStream = new MyDataStream(this, 'DataStream', {
-      stackName: this.stackName
+      parameterKeyName: '/firehoseS3/kds/dataStreamName'
     })
 
     /*
@@ -35,7 +35,7 @@ export class DeliveryS3Stack extends Stack {
       errorOutputPrefix: 'error/!{firehose:error-output-type}/!{timestamp:yyyy/MM/dd/HH}/'
     })
 
-    new kinesisfirehose_alpha.DeliveryStream(this, 'SampleDeliveryStream', {
+    const deliveryStream_ = new kinesisfirehose_alpha.DeliveryStream(this, 'SampleDeliveryStream', {
       destinations: [s3Destination],
       sourceStream: myDataStream.dataStream
     })
@@ -45,7 +45,8 @@ export class DeliveryS3Stack extends Stack {
     -------------------------------------------------------------------------- */
     new KdsCWDashboard(this, 'KdsCWDashborad', {
       prefix: props.prefix,
-      dataStream: myDataStream.dataStream
+      dataStream: myDataStream.dataStream,
+      deliveryStream: deliveryStream_
     })
   }
 }

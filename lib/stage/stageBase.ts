@@ -13,6 +13,7 @@ export abstract class StageBase extends Stage {
     const baseStack = new BaseStack(scope, `${prefix}-base-stack`, { env })
     const deliveryS3Stack = new DeliveryS3Stack(scope, `${prefix}-delivery-s3-stack`, {
       env,
+      prefix: config.prefix,
       bucket: baseStack.bucket
     })
 
