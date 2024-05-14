@@ -491,7 +491,7 @@ export class KdsCWDashboard extends Construct {
           namespace: 'LambdaInsights',
           metricName: 'memory_utilization',
           dimensionsMap: {
-            FunctionName: this.lambdaFunction.functionName
+            function_name: this.lambdaFunction.functionName
           },
           statistic: cw.Stats.MAXIMUM
         })
