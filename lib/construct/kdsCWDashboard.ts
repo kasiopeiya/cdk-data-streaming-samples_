@@ -59,6 +59,9 @@ interface FirehoseSectionWidgets extends CommonWidgets {
   deliveryToS3SuccessWid: cw.GraphWidget
   deliveryToS3RecordsWid: cw.GraphWidget
   deliveryToS3DataFreshnessWid: cw.GraphWidget
+  succeedProcessingRecords: cw.GraphWidget
+  executeProcessingSuccess: cw.GraphWidget
+  partitionCount: cw.GraphWidget
 }
 
 /** カスタムメトリクスのキー項目 */
@@ -192,10 +195,24 @@ export class KdsCWDashboard extends Construct {
         this.firehoseWidgets.dataReadFromKinesisStreamBytesWid
       )
       dashboard.addWidgets(
-        this.firehoseWidgets.deliveryToS3SuccessWid,
-        this.firehoseWidgets.deliveryToS3RecordsWid
+        this.firehoseWidgets.deliveryToS3RecordsWid,
+        this.firehoseWidgets.deliveryToS3SuccessWid
       )
       dashboard.addWidgets(this.firehoseWidgets.deliveryToS3DataFreshnessWid)
+      if (props.lambdaFunction !== undefined) {
+        dashboard.addWidgets(
+          new cw.TextWidget({
+            markdown: '## 動的パーティショニング',
+            height: 1,
+            width: 24
+          })
+        )
+        dashboard.addWidgets(
+          this.firehoseWidgets.succeedProcessingRecords,
+          this.firehoseWidgets.executeProcessingSuccess
+        )
+        dashboard.addWidgets(this.firehoseWidgets.partitionCount)
+      }
     }
   }
 
@@ -539,7 +556,7 @@ export class KdsCWDashboard extends Construct {
         createCustomMetrics(cw.Stats.AVERAGE),
         createCustomMetrics(cw.Stats.MINIMUM)
       ],
-      width: this.defaultHeight,
+      width: this.defaultWidth,
       height: this.defaultHeight,
       leftYAxis: { min: 0 },
       rightYAxis: { min: 0 }
@@ -731,8 +748,39 @@ Lambda関数から出力されるログ情報
       ],
       width: this.defaultWidth,
       height: this.defaultHeight,
+      leftYAxis: { min: 0 },
+      period: Duration.minutes(1)
+    })
+
+    const succeedProcessingRecords = new cw.GraphWidget({
+      title: 'Lambdaによる加工処理が正常に完了したレコード数(Sum)',
+      left: [createFirehoseMetric('SucceedProcessing.Records')],
+      width: this.defaultWidth,
+      height: this.defaultHeight,
       statistic: cw.Stats.SUM,
       leftYAxis: { min: 0 },
+      period: Duration.minutes(1)
+    })
+
+    const executeProcessingSuccess = new cw.GraphWidget({
+      title: '正常に完了したLambdaによる加工処理数(Sum)',
+      left: [createFirehoseMetric('ExecuteProcessing.Success')],
+      width: this.defaultWidth,
+      height: this.defaultHeight,
+      statistic: cw.Stats.SUM,
+      leftYAxis: { min: 0 },
+      period: Duration.minutes(1)
+    })
+
+    const partitionCount = new cw.GraphWidget({
+      title: '動的パーティショニングによるパーティション数と上限超過数(Max)',
+      left: [createFirehoseMetric('PartitionCount')],
+      right: [createFirehoseMetric('PartitionCountExceeded')],
+      width: this.defaultWidth,
+      height: this.defaultHeight,
+      statistic: cw.Stats.MAXIMUM,
+      leftYAxis: { min: 0 },
+      rightYAxis: { min: 0 },
       period: Duration.minutes(1)
     })
 
@@ -742,7 +790,10 @@ Lambda関数から出力されるログ情報
       dataReadFromKinesisStreamBytesWid,
       deliveryToS3RecordsWid,
       deliveryToS3SuccessWid,
-      deliveryToS3DataFreshnessWid
+      deliveryToS3DataFreshnessWid,
+      succeedProcessingRecords,
+      executeProcessingSuccess,
+      partitionCount
     }
   }
 }
