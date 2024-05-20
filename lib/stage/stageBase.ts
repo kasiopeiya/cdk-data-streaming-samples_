@@ -1,10 +1,10 @@
+import * as path from 'path'
 import { type Stack, Stage, Duration } from 'aws-cdk-lib'
 import { type Construct } from 'constructs'
 
 import { type Config } from '../../config'
 import { BaseStack } from '../stack/baseStack'
 import { DeliveryS3Stack } from '../stack/deliveryS3Stack'
-import path = require('path')
 
 export abstract class StageBase extends Stage {
   createCommonStacks(scope: Construct, config: Config): Record<string, Stack> {
