@@ -78,7 +78,7 @@ interface KdsCWDashboardProps {
   dataStream?: Stream
   /** Lambda Function */
   lambdaFunction?: LambdaFunction
-  /** Lambda Function */
+  /** Data Firehose */
   deliveryStream?: DeliveryStream
 }
 
@@ -148,10 +148,9 @@ export class KdsCWDashboard extends Construct {
         .streamMode
       if (capacityMode === 'ON_DEMAND') {
         new KdsShardCountMetrics(this, 'KdsShardCountMetrics', {
-          prefix: props.prefix,
           dataStream: this.dataStream,
           nameSpace: this.shardCountMetricsKeys.nameSpace,
-          metricsName: this.shardCountMetricsKeys.metricName
+          metricName: this.shardCountMetricsKeys.metricName
         })
       }
     }
@@ -478,7 +477,6 @@ export class KdsCWDashboard extends Construct {
       ],
       width: this.defaultWidth,
       height: this.defaultHeight,
-      statistic: cw.Stats.SUM,
       leftYAxis: { min: 0 },
       period: Duration.minutes(1)
     })
