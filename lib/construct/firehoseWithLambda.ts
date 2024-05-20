@@ -8,7 +8,7 @@ import * as lambda from 'aws-cdk-lib/aws-lambda'
 import { type CfnDeliveryStream } from 'aws-cdk-lib/aws-kinesisfirehose'
 import * as logs from 'aws-cdk-lib/aws-logs'
 
-interface MyFirehoseWithLambdaProps {
+interface FirehoseWithLambdaProps {
   /** KDS Data Stream */
   sourceStream: Stream
   /** 配信先S3バケット */
@@ -26,11 +26,11 @@ interface MyFirehoseWithLambdaProps {
 /**
  * 動的パーティショニングを使ったData FirehoseによるS3配信
  */
-export class MyFirehoseWithLambda extends Construct {
+export class FirehoseWithLambda extends Construct {
   public readonly deliveryStream: kinesisfirehose_alpha.DeliveryStream
   public readonly lambdaFunc: lambda.Function
 
-  constructor(scope: Construct, id: string, props: MyFirehoseWithLambdaProps) {
+  constructor(scope: Construct, id: string, props: FirehoseWithLambdaProps) {
     super(scope, id)
 
     props.bufferingInterval ??= Duration.seconds(10)

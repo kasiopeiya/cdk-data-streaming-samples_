@@ -6,9 +6,9 @@ import * as kinesisfirehose_destination_alpha from '@aws-cdk/aws-kinesisfirehose
 import { type Function as LambdaFunction } from 'aws-cdk-lib/aws-lambda'
 import * as logs from 'aws-cdk-lib/aws-logs'
 
-import { MyDataStream } from '../construct/kds'
+import { KdsDataStream } from '../construct/kdsDataStream'
 import { KdsCWDashboard } from '../construct/kdsCWDashboard'
-import { MyFirehoseWithLambda } from '../construct/myFirehoseWithLambda'
+import { FirehoseWithLambda } from '../construct/firehoseWithLambda'
 
 interface DeliveryS3StackProps extends StackProps {
   /** プレフィックス */
@@ -40,7 +40,7 @@ export class DeliveryS3Stack extends Stack {
     /*
     * Kinesis Data Streams
     -------------------------------------------------------------------------- */
-    const myDataStream = new MyDataStream(this, 'DataStream', {
+    const myDataStream = new KdsDataStream(this, 'DataStream', {
       parameterKeyName: '/firehoseS3/kds/dataStreamName'
     })
 
@@ -57,7 +57,7 @@ export class DeliveryS3Stack extends Stack {
         props.bufferingInterval = Duration.seconds(60)
       }
       props.lambdaProcessing.processorBufferingInterval ??= Duration.seconds(5)
-      const myFirehoseWithLambda = new MyFirehoseWithLambda(this, 'FirehoseWithLambda', {
+      const myFirehoseWithLambda = new FirehoseWithLambda(this, 'FirehoseWithLambda', {
         sourceStream: myDataStream.dataStream,
         destinationBucket: props.bucket,
         backupBucket: props.lambdaProcessing.bkBucket,

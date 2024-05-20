@@ -2,15 +2,15 @@ import { Construct } from 'constructs'
 import { Stream, type StreamProps, StreamMode } from 'aws-cdk-lib/aws-kinesis'
 import * as ssm from 'aws-cdk-lib/aws-ssm'
 
-interface MyDataStreamProps {
+interface KdsDataStreamProps {
   parameterKeyName: string
   dataStreamProps?: StreamProps
 }
 
-export class MyDataStream extends Construct {
+export class KdsDataStream extends Construct {
   public readonly dataStream: Stream
 
-  constructor(scope: Construct, id: string, props: MyDataStreamProps) {
+  constructor(scope: Construct, id: string, props: KdsDataStreamProps) {
     super(scope, id)
 
     // Kinesis Data Streams
