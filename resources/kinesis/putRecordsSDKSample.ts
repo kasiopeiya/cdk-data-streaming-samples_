@@ -1,3 +1,5 @@
+/** AWS SDKでKDSにレコードを送信するスクリプト */
+
 import * as winston from 'winston'
 import {
   KinesisClient,
@@ -27,7 +29,7 @@ const logger = winston.createLogger({
   level: 'info',
   format: winston.format.combine(
     winston.format.timestamp(),
-    winston.format.printf((info) => `[${info.timestamp}]${info.level} ${info.message}`)
+    winston.format.printf((info) => `[${info.timestamp}] ${info.level} ${info.message}`)
   ),
   transports: [
     new winston.transports.Console(),
