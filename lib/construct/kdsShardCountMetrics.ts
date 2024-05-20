@@ -1,4 +1,4 @@
-import { RemovalPolicy } from 'aws-cdk-lib'
+import { RemovalPolicy, Stack } from 'aws-cdk-lib'
 import { Construct } from 'constructs'
 import { type Stream } from 'aws-cdk-lib/aws-kinesis'
 import * as nodejsLambda from 'aws-cdk-lib/aws-lambda-nodejs'
@@ -9,10 +9,9 @@ import * as iam from 'aws-cdk-lib/aws-iam'
 import * as logs from 'aws-cdk-lib/aws-logs'
 
 interface KdsShardCountMetricsProps {
-  prefix: string
   dataStream: Stream
   nameSpace: string
-  metricsName: string
+  metricName: string
 }
 
 export class KdsShardCountMetrics extends Construct {
@@ -25,7 +24,7 @@ export class KdsShardCountMetrics extends Construct {
 
     // Lambda Function
     const lambdaFunc = new nodejsLambda.NodejsFunction(this, 'LambdaFunc', {
-      functionName: `${props.prefix}-put-metrics-func`,
+      functionName: `${Stack.of(this).stackName}-put-metrics-func`,
       entry: './resources/lambda/kdsShardCount/index.ts',
       handler: 'handler',
       runtime: lambda_.Runtime.NODEJS_18_X,
