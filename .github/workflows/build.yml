@@ -11,9 +11,9 @@ jobs:
     steps:
       - name: Set AWS Account Information
         run: |
-          if [[ ${{ github.ref }} == 'refs/heads/dev' ]]; then
+          if [[ ${{ github.base_ref }} == 'dev' ]]; then
             echo "ROLE_TO_ASSUME=arn:aws:iam::${{ secrets.DEV_ACCOUNT_ID }}:role/ghac-cdk-deploy-role" >> $GITHUB_ENV
-          elif [[ ${{ github.ref }} == 'refs/heads/main' ]]; then
+          elif [[ ${{ github.base_ref }} == 'main' ]]; then
             echo "ROLE_TO_ASSUME=arn:aws:iam::${{ secrets.PROD_ACCOUNT_ID }}:role/ghac-cdk-deploy-role" >> $GITHUB_ENV
           fi
           echo "DEV_ACCOUNT_ID=${{ secrets.DEV_ACCOUNT_ID }}" >> $GITHUB_ENV
