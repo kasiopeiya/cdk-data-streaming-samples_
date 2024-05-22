@@ -1,6 +1,7 @@
 import { Construct } from 'constructs'
 import { Stream, type StreamProps, StreamMode } from 'aws-cdk-lib/aws-kinesis'
 import * as ssm from 'aws-cdk-lib/aws-ssm'
+import { RemovalPolicy } from 'aws-cdk-lib'
 
 interface KdsDataStreamProps {
   parameterKeyName: string
@@ -17,6 +18,7 @@ export class KdsDataStream extends Construct {
     this.dataStream = new Stream(this, 'Resource', {
       shardCount: props.dataStreamProps?.shardCount ?? 1,
       streamMode: StreamMode.PROVISIONED,
+      removalPolicy: RemovalPolicy.DESTROY,
       // streamMode: StreamMode.ON_DEMAND,
       ...props.dataStreamProps
     })

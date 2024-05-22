@@ -408,7 +408,7 @@ exports[`deliveryS3Stack 1`] = `
   },
   "Resources": {
     "DataStream80B8B961": {
-      "DeletionPolicy": "Retain",
+      "DeletionPolicy": "Delete",
       "Properties": {
         "RetentionPeriodHours": 24,
         "ShardCount": 1,
@@ -429,7 +429,7 @@ exports[`deliveryS3Stack 1`] = `
         },
       },
       "Type": "AWS::Kinesis::Stream",
-      "UpdateReplacePolicy": "Retain",
+      "UpdateReplacePolicy": "Delete",
     },
     "DataStreamparameterD94E8D77": {
       "Properties": {
