@@ -5,8 +5,8 @@ updates:
     open-pull-requests-limit: 30
     schedule:
       interval: 'weekly'
-      day: 'tuesday'
-      time: '08:20'
+      day: 'monday'
+      time: '07:00'
       timezone: 'Asia/Tokyo'
     ignore:
       - dependency-name: '@types/node'
