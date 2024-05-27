@@ -19,6 +19,7 @@ jobs:
           fi
           echo "DEV_ACCOUNT_ID=${{ secrets.DEV_ACCOUNT_ID }}" >> $GITHUB_ENV
           echo "PROD_ACCOUNT_ID=${{ secrets.PROD_ACCOUNT_ID }}" >> $GITHUB_ENV
+          echo "ROLE_TO_ASSUME=arn:aws:iam::${{ secrets.DEV_ACCOUNT_ID }}:role/ghac-cdk-deploy-role"
 
       - uses: aws-actions/configure-aws-credentials@v4
         with:
