@@ -42,7 +42,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = ${process.env.DIFF}
+            const output = process.env.DIFF
             await core.summary
               .addHeading('cdk diff report')
               .addRaw(output)
