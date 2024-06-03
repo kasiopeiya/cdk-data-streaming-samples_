@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-      contents: read
+      contents: write
     env:
       AWS_ACCOUNT_NAME: ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
     steps:
@@ -34,9 +34,6 @@ jobs:
 
       - name: build
         uses: ./.github/workflows/build
-
-      - name: CDK Diff Check
-        run: npx cdk diff "$AWS_ACCOUNT_NAME/*"
 
       - name: CDK Deploy
         run: npx cdk deploy "$AWS_ACCOUNT_NAME/*"
