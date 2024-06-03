@@ -42,15 +42,15 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = "$process.env.DIff"
+            const output = "${process.env.DIff}"
             await core.summary
               .addHeading('cdk diff report')
               .addRaw(output)
               .write()
 
-      - name: CDK Deploy
-        run: npx cdk deploy "$AWS_ACCOUNT_NAME/*"
+      # - name: CDK Deploy
+      #   run: npx cdk deploy "$AWS_ACCOUNT_NAME/*"
 
-      # コストがかかるため削除
-      - name: CDK Destroy
-        run: npx cdk destroy -f "$AWS_ACCOUNT_NAME/*"
+      # # コストがかかるため削除
+      # - name: CDK Destroy
+      #   run: npx cdk destroy -f "$AWS_ACCOUNT_NAME/*"
