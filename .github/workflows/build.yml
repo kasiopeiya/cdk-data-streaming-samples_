@@ -35,7 +35,7 @@ jobs:
           DIFF: "cdk diff\n${{ steps.diff.outputs.stdout }}"
           SNAPSHOT: "snapshot testing\n${{ steps.snapshot.outputs.stdout }}"
         with:
-          github-token: ${ secrets.GITHUB_TOKEN }
+          github-token: ${secrets.GITHUB_TOKEN}
           script: |
             const output = ${{ process.env.DIff }}
             await core.summary
